@@ -1,0 +1,61 @@
+group 'com.rozikovp'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'war'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.3.RELEASE")
+    }
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web:1.4.3.RELEASE")
+//    compile("org.springframework.boot:spring-boot-starter-jdbc:1.4.3.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa:+")
+
+    compile("org.springframework:spring-context-support:4.2.3.RELEASE")
+    compile("org.springframework:spring-orm:+")
+    //compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.2.10.Final'
+    compile("org.hibernate:hibernate-entitymanager:+")
+
+    compile("org.hibernate:hibernate-core:5.2.10.Final")
+
+    //compile("org.springframework.data:spring-data-jpa:+")
+    compile("org.hsqldb:hsqldb:+")
+
+    testCompile("org.codehaus.woodstox:woodstox-core-asl:4.4.1")
+
+    testCompile("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.6.3")
+    testCompile("org.springframework:spring-test")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile("org.hamcrest:hamcrest-all:+")
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+}
+
+

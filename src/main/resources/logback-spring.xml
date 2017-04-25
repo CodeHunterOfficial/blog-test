@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}/}spring.log}"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <property name="DEV_HOME" value="logs" />
+
+    <appender name="FILE-AUDIT"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${DEV_HOME}/debug.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-50.50logger{49} => %-20.20M{20} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}
+            </Pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${DEV_HOME}/archived/debug.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+    </appender>
+
+    <appender name="HTML-AUDIT"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${DEV_HOME}/debug.html</file>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <!--<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+            <layout class="ch.qos.logback.classic.html.HTMLLayout">
+                <!--<Pattern>-->
+                    <!--%d{yyyy-MM-dd HH:mm:ss.SSS}%{LOG_LEVEL_PATTERN:-%5p}%{PID:- }%t%logger%M%m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}-->
+                <!--</Pattern>-->
+                <!--<charset>UTF-8</charset>-->
+                <!--<outputPatternAsHeader>true</outputPatternAsHeader>-->
+
+                <pattern>%d%relative%thread%mdc%level%t%logger%M%L%msg</pattern>
+            </layout>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${DEV_HOME}/archived/debug.%d{yyyy-MM-dd}.%i.html
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+    </appender>
+
+
+    <appender name="FILE-ERROR"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${DEV_HOME}/error.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}
+            </Pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${DEV_HOME}/archived/error.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+    </appender>
+
+
+    <root level="error">
+        <appender-ref ref="FILE-ERROR" />
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="HTML-AUDIT"/>
+    </root>
+
+
+    <logger name="org.springframework.web" level="INFO"
+            additivity="false">
+        <appender-ref ref="FILE-AUDIT" />
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="HTML-AUDIT"/>
+    </logger>
+
+    <logger name="org.springframework.webmvc" level="INFO"
+            additivity="false">
+        <appender-ref ref="FILE-AUDIT" />
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="HTML-AUDIT"/>
+    </logger>
+
+    <logger name="org.springframework.boot" level="INFO"
+            additivity="false">
+        <appender-ref ref="FILE-AUDIT" />
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="HTML-AUDIT"/>
+    </logger>
+
+
+    <logger name="org.springframework.jdbc" level="INFO"
+            additivity="false">
+        <appender-ref ref="FILE-AUDIT" />
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="HTML-AUDIT"/>
+    </logger>
+
+</configuration>
